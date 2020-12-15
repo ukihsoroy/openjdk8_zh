@@ -546,6 +546,8 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 
     /**
      * The default rejected execution handler
+     * 任务拒绝
+     *
      */
     private static final RejectedExecutionHandler defaultHandler =
         new AbortPolicy();
@@ -602,9 +604,15 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
          */
         private static final long serialVersionUID = 6138294804551838833L;
 
-        /** Thread this worker is running in.  Null if factory fails. */
+        /**
+         * Thread this worker is running in.  Null if factory fails.
+         * work持有的线程
+         * */
         final Thread thread;
-        /** Initial task to run.  Possibly null. */
+        /**
+         * Initial task to run.  Possibly null.
+         * 初始化任务，可以为null
+         *  */
         Runnable firstTask;
         /** Per-thread task counter */
         volatile long completedTasks;

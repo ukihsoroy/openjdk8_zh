@@ -37,7 +37,8 @@ package java.util.concurrent;
 
 /**
  * A handler for tasks that cannot be executed by a {@link ThreadPoolExecutor}.
- *
+ * 任务拒绝模块是线程池的保护部分，线程池有一个最大的容量，当线程池的任务缓存队列已满，
+ * 并且线程池中的线程数目达到maximumPoolSize时，就需要拒绝掉该任务，采取任务拒绝策略，保护线程池。
  * @since 1.5
  * @author Doug Lea
  */
