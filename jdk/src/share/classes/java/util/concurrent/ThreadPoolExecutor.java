@@ -378,15 +378,29 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * that workerCount is 0 (which sometimes entails a recheck -- see
      * below).
      */
+
+    //记录运行状态和线程数量
     private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
+
+
     private static final int COUNT_BITS = Integer.SIZE - 3;
     private static final int CAPACITY   = (1 << COUNT_BITS) - 1;
 
-    // runState is stored in the high-order bits
+    // runState is stored in the high-order bits， 运行状态
+
+    //能接受新提交的任务，并且也能处理阻塞队列中的任务。
     private static final int RUNNING    = -1 << COUNT_BITS;
+
+    //关闭状态，不再接收新的任务，但却可以继续处理阻塞队列中已保存的任务。
     private static final int SHUTDOWN   =  0 << COUNT_BITS;
+
+    //不能接收新的任务，也不处理队列中的任务，会中断正在处理任务的线程
     private static final int STOP       =  1 << COUNT_BITS;
+
+    //所有的任务都已终止，workerCount(有效线程数)为0.
     private static final int TIDYING    =  2 << COUNT_BITS;
+
+    //在terminated() 方法执行完成后进入该状态
     private static final int TERMINATED =  3 << COUNT_BITS;
 
     // Packing and unpacking ctl
@@ -444,6 +458,7 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
      * queues such as DelayQueues for which poll() is allowed to
      * return null even if it may later return non-null when delays
      * expire.
+     * 任务执行的缓冲队列，执行任务的缓冲
      */
     private final BlockingQueue<Runnable> workQueue;
 
@@ -704,9 +719,9 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
     final void tryTerminate() {
         for (;;) {
             int c = ctl.get();
-            if (isRunning(c) ||
+            if (isRunning(c) || //运行状态
                 runStateAtLeast(c, TIDYING) ||
-                (runStateOf(c) == SHUTDOWN && ! workQueue.isEmpty()))
+                (runStateOf(c) == SHUTDOWN && ! workQueue.isEmpty())) //后续还有任务
                 return;
             if (workerCountOf(c) != 0) { // Eligible to terminate
                 interruptIdleWorkers(ONLY_ONE);
